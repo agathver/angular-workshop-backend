@@ -11,23 +11,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Order(100)
 @Configuration
 @EnableWebSecurity
-public class SecureWeb extends WebSecurityConfigurerAdapter{
+public class SecureWeb extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private  AccountAuthenticationProvider userAuthenticationProvider;
+    @Autowired
+    private AccountAuthenticationProvider userAuthenticationProvider;
 
-	@Autowired
-	private void configureGlobal(AuthenticationManagerBuilder auth) {
-		auth.authenticationProvider(userAuthenticationProvider);
-	}
-	
-	protected void configure(HttpSecurity http) throws Exception {
+    @Autowired
+    private void configureGlobal(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(userAuthenticationProvider);
+    }
 
-		http
-			.authorizeRequests().antMatchers("/api/register/**").permitAll()
-				.anyRequest().authenticated()
-				.and()
-			.formLogin().and()
-			.httpBasic();
-	}
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeRequests().antMatchers("/api/register/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().and()
+                .httpBasic();
+    }
 }
