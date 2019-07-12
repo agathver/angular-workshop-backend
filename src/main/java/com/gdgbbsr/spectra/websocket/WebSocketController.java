@@ -1,6 +1,6 @@
-package com.gdg.chatapp.websocket;
+package com.gdgbbsr.spectra.websocket;
 
-import com.gdg.chatapp.models.ChatModel;
+import com.gdgbbsr.spectra.models.ChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
