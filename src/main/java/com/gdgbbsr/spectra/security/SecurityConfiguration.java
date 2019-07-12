@@ -39,11 +39,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*");
+        registry.addMapping("/**")
+            .allowedOrigins("http://localhost:4200")
+            .allowCredentials(true);
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.cors().and()
+            .csrf().disable()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
