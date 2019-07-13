@@ -50,11 +50,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeRequests()
-            .antMatchers("/auth/register").permitAll()
-            .antMatchers("/").permitAll()
-            .anyRequest().authenticated()
-            .and().httpBasic();
+//            .authorizeRequests()
+//            .antMatchers("/auth/register").permitAll()
+//            .antMatchers("/realtime").permitAll()
+//            .antMatchers("/").permitAll()
+//            .anyRequest().authenticated()
+//            .and()
+            .httpBasic();
     }
 
     @Override

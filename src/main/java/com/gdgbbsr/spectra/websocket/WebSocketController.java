@@ -1,14 +1,19 @@
 package com.gdgbbsr.spectra.websocket;
 
-import com.gdgbbsr.spectra.models.ChatModel;
+import com.gdgbbsr.spectra.dto.Message;
+import com.gdgbbsr.spectra.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author azar
@@ -17,26 +22,25 @@ import java.util.Date;
 @Controller
 public class WebSocketController {
 
-    private final SimpMessagingTemplate template;
-
     @Autowired
-    WebSocketController(SimpMessagingTemplate template) {
-        this.template = template;
+    private SimpMessagingTemplate template;
+
+    @MessageMapping("/channels/{id}/send_message")
+    @SendTo("/topic/public")
+    public String onReceivedMessage(@DestinationVariable String id, @Payload Message message) {
+        System.out.printf("Channel %s, Message %s\n", id, message);
+//        this.template.convertAndSend("/topic/channels/" + id, message);
+        this.template.convertAndSend("/topic/public", "Hello World!");
+
+        return "Wohaahhha!";
     }
 
-    @MessageMapping("/send/message")
-    public void onReceivedMessage(String message) {
-        System.out.println("Message " + message);
-        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date()) + "-" + message);
+    @MessageMapping("/channels/{id}/join")
+    public void onUserJoin(@DestinationVariable String id, @Payload User user) {
+        System.out.println("User joined: " + user);
+        Message message = new Message();
+        message.setType(Message.MessageType.JOIN);
+        message.setUsername(user.getUsername());
+//        this.template.convertAndSend("/topic/channels/" + id, message);
     }
-
-    /**
-     * @param message It is {@link ChatModel} model that receives message to be sent
-     * @author azar
-     */
-    @MessageMapping("msg/send/{username}")
-    public void sendMessage(@RequestBody ChatModel messageModel) {
-        this.template.convertAndSend("/chat/" + messageModel.getToPhoneNo(), messageModel.getMessage());
-    }
-
 }
